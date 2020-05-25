@@ -4,7 +4,7 @@
 
 ## 说明
 
-微信官方有提供相关的sdk(https://wximg.gtimg.com/shake_tv/mpwiki/cryptoDemo.zip)，不过里面的PHP示例的功能有限，代码也比较一般，所以干脆重新改写一翻吧。
+[微信官方有提供相关的sdk](https://wximg.gtimg.com/shake_tv/mpwiki/cryptoDemo.zip)，不过里面的PHP示例的功能有限，代码也比较一般，所以干脆重新改写一翻吧。
 
 ## 依赖
 
