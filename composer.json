@@ -1,0 +1,25 @@
+{
+  "name": "cloverphp/wechatoasdk",
+  "description": "wechat official account sdk",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "CloverPHP",
+      "email": "cloverphp@qq.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": "^5.6 || >=7.0",
+    "ext-openssl": "*",
+    "ext-libxml": "*",
+    "ext-simplexml": "*",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "CloverPHP\\WechatOANotice\\": "src\/"
+    }
+  }
+}
