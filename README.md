@@ -8,7 +8,7 @@
 
 ## 依赖
 
-* php5.3+
+* php5.4+
 * json扩展
 * openssl扩展
 * libxml扩展
@@ -35,7 +35,7 @@ $callback = new WxCallback($config);//这里会自动处理接口地址验证和
 $params = $callback->getParam();//上面一行解析完，这里通过getParam可以获取XML对应的参数
 
 $xml = new WxXml($params);
-$string = $xml->generateText($callback);
+$string = $xml->generateText('Hello Wechat Official Account!');
 if ($callback->encrypt_type === 'aes')
     $callback->encrypt($string);
 echo $string;
