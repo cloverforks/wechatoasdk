@@ -5,7 +5,7 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "CloverPHP",
+      "name": "Clover",
       "email": "cloverphp@qq.com"
     }
   ],
@@ -19,7 +19,10 @@
   },
   "autoload": {
     "psr-4": {
-      "CloverPHP\\WechatOANotice\\": "src\/"
-    }
+      "Clover\\WechatOA\\": "src\/"
+    },
+    "files": [
+      "src/functions.php"
+    ]
   }
 }

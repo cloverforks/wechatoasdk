@@ -1,6 +1,6 @@
 <?php
 
-namespace CloverPHP\WechatOANotice;
+namespace Clover\WechatOA;
 
 /**
  * error code 说明.

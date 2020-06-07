@@ -1,7 +1,7 @@
 <?php
 
-use CloverPHP\WechatOANotice\WxCallback;
-use CloverPHP\WechatOANotice\WxXml;
+use Clover\WechatOA\WxCallback;
+use Clover\WechatOA\WxXml;
 
 require __DIR__ . '/vendor/autoload.php';
 

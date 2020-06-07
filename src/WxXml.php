@@ -1,9 +1,10 @@
 <?php
 
-namespace CloverPHP\WechatOANotice;
+namespace Clover\WechatOA;
 
 final class WxXml
 {
+
     private $data = '';
     private $msgType = '';
     private $toUser = '';
@@ -33,11 +34,10 @@ final class WxXml
     }
 
     /**
-     * 返回文本消息给用户
-     * @param string $content
-     * @return string
+     * @param $content
+     * @return mixed|string
      */
-    public function genText($content)
+    public function generateText($content)
     {
         $this->msgType = 'text';
         $this->data = "<Content><![CDATA[{$content}]]></Content>";
@@ -45,11 +45,10 @@ final class WxXml
     }
 
     /**
-     * 返回图片消息给用户
-     * @param string $mediaId
-     * @return string
+     * @param $mediaId
+     * @return mixed|string
      */
-    public function genImage($mediaId)
+    public function generateImage($mediaId)
     {
         $this->msgType = 'image';
         $this->data = "<Image>
@@ -59,47 +58,44 @@ final class WxXml
     }
 
     /**
-     * 返回语音消息给用户
-     * @param string $mediaId
-     * @return string
+     * @param $mediaId
+     * @return $this
      */
-    public function genVoice($mediaId)
+    public function generateVoice($mediaId)
     {
         $this->msgType = 'voice';
         $this->data = "<Voice>
 <MediaId><![CDATA[{$mediaId}]]></MediaId>
 </Voice>";
-        return $this->fetch();
+        return $this;
     }
 
     /**
-     * 返回视频给用户
-     * @param string $mediaId
-     * @param string $title
-     * @param string $description
-     * @return string
+     * @param $mediaId
+     * @param $title
+     * @param $description
+     * @return mixed|string
      */
-    public function genVideo($mediaId, $title = '', $description = '')
+    public function generateVideo($mediaId, $title, $description)
     {
         $this->msgType = 'video';
         $this->data = "<Video>
-    <MediaId><![CDATA[$mediaId]]></MediaId>
-    <Title><![CDATA[$title]]></Title>
-    <Description><![CDATA[$description]]></Description>
-  </Video>";
+<MediaId><![CDATA[{$mediaId}]]></MediaId>
+<Title><![CDATA[{$title}]]></Title>
+<Description><![CDATA[{$description}]]></Description>
+</Video>";
         return $this->fetch();
     }
 
     /**
-     * 返回音乐消息给用户
-     * @param string $mediaId
-     * @param string $title
-     * @param string $description
-     * @param string $url
-     * @param string $hqUrl
-     * @return string
+     * @param $mediaId
+     * @param $title
+     * @param $description
+     * @param $url
+     * @param $hqUrl
+     * @return mixed|string
      */
-    public function genMusic($mediaId, $title, $description, $url, $hqUrl)
+    public function generateMusic($mediaId, $title, $description, $url, $hqUrl)
     {
         $this->msgType = 'music';
         $this->data = "<Music>
@@ -113,35 +109,10 @@ final class WxXml
     }
 
     /**
-     * 返回图文列表给用户
-     * @param string $url
-     * @param string $picUrl
-     * @param string $title
-     * @param string $description
-     * @return string
+     * @param $articles
+     * @return mixed|string
      */
-    public function genOneNews($url, $picUrl = '', $title = '', $description = '')
-    {
-        $this->msgType = 'news';
-        $this->data = "<ArticleCount>1</ArticleCount>
-<Articles>
-<item>
-<Title><![CDATA[$title]]></Title> 
-<Description><![CDATA[$description]]></Description>
-<PicUrl><![CDATA[$picUrl]]></PicUrl>
-<Url><![CDATA[$url]]></Url>
-</item>
-</Articles>";
-        return $this->fetch();
-    }
-
-
-    /**
-     * 返回图文列表给用户
-     * @param array $articles
-     * @return string
-     */
-    public function genNews($articles)
+    public function generateNews($articles)
     {
         $this->msgType = 'news';
         $count = count($articles);
@@ -162,9 +133,8 @@ final class WxXml
         return $this->fetch();
     }
 
-
     /**
-     * @return string
+     * @return mixed|string
      */
     final private function fetch()
     {
