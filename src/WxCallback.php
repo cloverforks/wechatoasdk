@@ -2,6 +2,8 @@
 
 namespace CloverPHP\WechatOANotice;
 
+use Swoole\Http\Request;
+
 /**
  * Class WxIndex
  * @property-read string $signature
@@ -54,29 +56,41 @@ class WxCallback
     /**
      * WxIndex constructor.
      * @param array $params
+     * @param Request|null $request
      */
-    public function __construct(array $params)
+    public function __construct(array $params, Request $request = null)
     {
         $this->token = isset($params['token']) ? (string)$params['token'] : '';
         $this->appId = isset($params['appid']) ? (string)$params['appid'] : '';
         $this->appSecret = isset($params['appsecret']) ? (string)$params['appsecret'] : '';
         $this->encodingAesKey = isset($params['encodingAESKey']) ? (string)$params['encodingAESKey'] : '';
 
-        $this->signature = isset($_GET["signature"]) ? (string)$_GET['signature'] : '';
-        $this->timestamp = isset($_GET["timestamp"]) ? (string)$_GET['timestamp'] : '';
-        $this->nonce = isset($_GET["nonce"]) ? (string)$_GET['nonce'] : '';
-        $this->openid = isset($_GET["openid"]) ? (string)$_GET['openid'] : '';
-        $this->echostr = isset($_GET["echostr"]) ? (string)$_GET['echostr'] : '';
-        $this->encrypt_type = isset($_GET["encrypt_type"]) ? (string)$_GET['encrypt_type'] : '';
-        $this->msg_signature = isset($_GET["msg_signature"]) ? (string)$_GET['msg_signature'] : '';
+        if ($request instanceof Request) {
+            $this->signature = isset($request->get['signature']) ? $request->get['signature'] : '';
+            $this->timestamp = isset($request->get['timestamp']) ? $request->get['timestamp'] : '';
+            $this->nonce = isset($request->get['nonce']) ? $request->get['nonce'] : '';
+            $this->openid = isset($request->get['openid']) ? $request->get['openid'] : '';
+            $this->echostr = isset($request->get['echostr']) ? $request->get['echostr'] : '';
+            $this->encrypt_type = isset($request->get['encrypt_type']) ? $request->get['encrypt_type'] : '';
+            $this->msg_signature = isset($request->get['msg_signature']) ? $request->get['msg_signature'] : '';
+        } else {
+            $this->signature = isset($_GET["signature"]) ? (string)$_GET['signature'] : '';
+            $this->timestamp = isset($_GET["timestamp"]) ? (string)$_GET['timestamp'] : '';
+            $this->nonce = isset($_GET["nonce"]) ? (string)$_GET['nonce'] : '';
+            $this->openid = isset($_GET["openid"]) ? (string)$_GET['openid'] : '';
+            $this->echostr = isset($_GET["echostr"]) ? (string)$_GET['echostr'] : '';
+            $this->encrypt_type = isset($_GET["encrypt_type"]) ? (string)$_GET['encrypt_type'] : '';
+            $this->msg_signature = isset($_GET["msg_signature"]) ? (string)$_GET['msg_signature'] : '';
+        }
 
-        $this->checkSignature();
-        $postString = file_get_contents("php://input");
+        if (!$this->checkSignature())
+            throw new \RuntimeException('wechatoa_invalid_signature');
 
+        $postString = $request instanceof Request ? $request->rawContent() : file_get_contents("php://input");
         if ($this->encrypt_type === 'aes') {
             $this->aesMsg = new WxAesMsg($this->token, $this->appId, $this->encodingAesKey);
             if (0 !== $this->aesMsg->decryptMsg($this->msg_signature, $this->timestamp, $this->nonce, $postString, $postString))
-                die('success');
+                throw new \RuntimeException('wechatoa_invalid_callback');
         }
 
         libxml_disable_entity_loader(true);
