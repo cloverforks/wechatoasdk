@@ -6,6 +6,9 @@ namespace Clover\WechatOA\Api;
 
 /**
  * Class WxApi
+ * @property-read QR $qr
+ * @property-read User $user
+ * @property-read Media $media
  */
 class WxApi
 {
@@ -29,7 +32,7 @@ class WxApi
      * @param string $accessToken
      * @param int $accessExpired
      */
-    final private function __construct($accessToken, $accessExpired)
+    final public function __construct($accessToken, $accessExpired)
     {
         $this->accessToken = $accessToken;
         $this->accessExpired = $accessExpired;
@@ -39,7 +42,7 @@ class WxApi
     final public function __get($name)
     {
         $className = 'Clover\\WechatOA\\Api\\' . ucfirst($name);
-        if (time() - $this->accessToken < 300)
+        if (time() - $this->accessExpired < 300)
             $this->renewToken();
 
         if (!isset($this->components[$className]))

@@ -48,7 +48,7 @@ class WxToken
      */
     public function request()
     {
-        $url = sprintf($this->url, $this->accessToken, $this->accessExpired);
+        $url = sprintf($this->url, $this->appId, $this->appSecret);
         if ($data = wechat_get_request($url)) {
             $this->accessToken = $data['access_token'];
             $this->accessExpired = time() + $data['expires_in'];
