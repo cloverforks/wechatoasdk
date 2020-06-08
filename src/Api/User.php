@@ -58,7 +58,7 @@ class User
     {
         $params = is_array($openids) ? $openids : [$openids];
         $url = sprintf($this->setBlacklistUrl, $this->accessToken);
-        if ($result = wechat_post_request($url, $params))
+        if ($result = wechat_post_request($url, $params,true))
             return $result;
         return false;
     }

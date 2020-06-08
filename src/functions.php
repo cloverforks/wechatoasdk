@@ -23,7 +23,7 @@ function wechat_get_request($url)
  * @param bool $json
  * @return bool|mixed
  */
-function wechat_post_request($url, $params, $json = false)
+function wechat_post_request($url, $params, $json = true)
 {
     $result = file_get_contents($url, false, stream_context_create([
         'http' => [
