@@ -54,12 +54,12 @@ function wechat_download_file($url, $return = true)
 
     if (!empty($http_response_header)) {
         $headers = implode("", $http_response_header);
-        if (stristr('Content-Type: image/jpeg;', $headers) === false)
+        if (stristr($headers, 'Content-disposition: attachment') === false)
             return false;
     } else
         return false;
 
-    if ($return = true)
+    if ($return === true)
         return $result;
     return file_put_contents($return, $result);
 }

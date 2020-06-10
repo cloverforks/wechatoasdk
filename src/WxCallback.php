@@ -132,7 +132,7 @@ class WxCallback
     {
         if ($name === null)
             return $this->params;
-        elseif (!isset($this->params[$name]))
+        elseif (isset($this->params[$name]))
             return $this->params[$name];
         else
             return $default;
