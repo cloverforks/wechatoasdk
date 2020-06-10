@@ -3,6 +3,7 @@
 namespace Clover\WechatOA;
 
 use Swoole\Http\Request;
+use Swoole\Http\Response;
 
 /**
  * Class WxIndex
@@ -57,8 +58,9 @@ class WxCallback
      * WxIndex constructor.
      * @param array $params
      * @param Request|null $request
+     * @param Response|null $response
      */
-    public function __construct(array $params, Request $request = null)
+    public function __construct(array $params, Request $request = null, Response $response = null)
     {
         $this->token = isset($params['token']) ? (string)$params['token'] : '';
         $this->appId = isset($params['appid']) ? (string)$params['appid'] : '';
@@ -73,6 +75,11 @@ class WxCallback
             $this->echostr = isset($request->get['echostr']) ? $request->get['echostr'] : '';
             $this->encrypt_type = isset($request->get['encrypt_type']) ? $request->get['encrypt_type'] : '';
             $this->msg_signature = isset($request->get['msg_signature']) ? $request->get['msg_signature'] : '';
+            $result = $this->checkSignature();
+            if (false === $result)
+                throw new \RuntimeException('wechatoa_invalid_signature');
+            elseif (is_string($result))
+                $response->end($result);
         } else {
             $this->signature = isset($_GET["signature"]) ? (string)$_GET['signature'] : '';
             $this->timestamp = isset($_GET["timestamp"]) ? (string)$_GET['timestamp'] : '';
@@ -81,10 +88,10 @@ class WxCallback
             $this->echostr = isset($_GET["echostr"]) ? (string)$_GET['echostr'] : '';
             $this->encrypt_type = isset($_GET["encrypt_type"]) ? (string)$_GET['encrypt_type'] : '';
             $this->msg_signature = isset($_GET["msg_signature"]) ? (string)$_GET['msg_signature'] : '';
+            if (!$this->checkSignature())
+                throw new \RuntimeException('wechatoa_invalid_signature');
         }
 
-        if (!$this->checkSignature())
-            throw new \RuntimeException('wechatoa_invalid_signature');
 
         $postString = $request instanceof Request ? $request->rawContent() : file_get_contents("php://input");
         if ($this->encrypt_type === 'aes') {
@@ -143,7 +150,7 @@ class WxCallback
 
         if ($signature === $this->signature) {
             if (!empty($this->echostr))
-                die($this->echostr);
+                return $this->echostr;
             else
                 return true;
         } else {
