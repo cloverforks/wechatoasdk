@@ -33,6 +33,7 @@ function wechat_post_request($url, $params, $json = true)
             'timeout' => 3
         ]
     ]));
+
     $data = json_decode($result, true);
     if (json_last_error() === 0)
         return $data;
@@ -44,14 +45,15 @@ function wechat_post_request($url, $params, $json = true)
  * @param bool|string $return
  * @return false|int|string
  */
-function wechat_download_file($url, $return = true)
+function wechat_download_file($url, $return = true, $data = [])
 {
-    $result = file_get_contents($url, false, stream_context_create([
-        'http' => [
-            'timeout' => 30
-        ]
-    ]));
-
+    $options = ['http' => ['timeout' => 30]];
+    if ($data) {
+        $options['http']['method'] = 'POST';
+        $options['http']['header'] = 'Content-Type: application/json';
+        $options['http']['content'] = json_encode($data);
+    }
+    $result = file_get_contents($url, false, stream_context_create($options));
     if (!empty($http_response_header)) {
         $headers = implode("", $http_response_header);
         if (stristr($headers, 'Content-disposition: attachment') === false)
