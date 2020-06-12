@@ -66,7 +66,10 @@ class Material
             'type' => 'video',
             'description' => json_encode([
                 'title' => $title,
-                'introduction' => $introduction
+                'intro' => $introduction,
+                'introduction' => $introduction,
+                'description' => $introduction,
+                'desc' => $introduction,
             ])
         ];
         return $this->addMaterial($file, $data);
@@ -120,7 +123,7 @@ class Material
      */
     private function addMaterial($file, $type = '')
     {
-        $url = sprintf($this->addUrl, $this->accessToken);
+        $url = sprintf($this->addUrl, $this->accessToken, is_array($type) ? 'video' : $type);
         if ($result = wechat_upload_file($url, $file, $type))
             return $result;
         return false;
@@ -177,7 +180,7 @@ class Material
     {
         $url = sprintf($this->listUrl, $this->accessToken);
         $params = [
-            'media_id' => $type,
+            'type' => $type,
             'offset' => $offset,
             'count' => $count,
         ];
