@@ -67,7 +67,7 @@ function wechat_download_file($url, $return = true)
 /**
  * @param string $url
  * @param array $file
- * @param string $type
+ * @param string|array $type
  * @return bool|array
  */
 function wechat_upload_file($url, $file, $type = '')
@@ -97,12 +97,19 @@ function wechat_upload_file($url, $file, $type = '')
         "Content-Type: {$file['type']}\r\n\r\n" .
         $file_contents . "\r\n";
 
-    $content .= "--" . $boundary . "\r\n" .
-        "Content-Disposition: form-data; name=\"type\"\r\n\r\n" .
-        "$type\r\n";
+    if (!is_array($type)) {
+        $content .= "--" . $boundary . "\r\n" .
+            "Content-Disposition: form-data; name=\"type\"\r\n\r\n" .
+            "$type\r\n";
+    } else {
+        foreach ($type as $k => $v) {
+            $content .= "--" . $boundary . "\r\n" .
+                "Content-Disposition: form-data; name=\"$k\"\r\n\r\n" .
+                "$v\r\n";
+        }
+    }
 
     $content .= "--" . $boundary . "--\r\n";
-
     $context = stream_context_create([
         'http' => [
             'method' => 'POST',
