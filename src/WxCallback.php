@@ -90,6 +90,8 @@ class WxCallback
             $this->msg_signature = isset($_GET["msg_signature"]) ? (string)$_GET['msg_signature'] : '';
             if (!$this->checkSignature())
                 throw new \RuntimeException('wechatoa_invalid_signature');
+            elseif ($this->echostr)
+                die($this->echostr);
         }
 
 
