@@ -6,11 +6,12 @@ namespace Clover\WechatOA\Api;
 
 /**
  * Class WxApi
- * @property-read QR $qr
+ * @property-read QR $QR
  * @property-read User $user
  * @property-read Media $media
  * @property-read Material $material
  * @property-read Menu $menu
+ * @property-read Util $util
  */
 class WxApi
 {

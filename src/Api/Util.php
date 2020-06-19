@@ -11,6 +11,8 @@ class Util
 {
     private $accessToken;
     private $linkUrl = 'https://api.weixin.qq.com/cgi-bin/shorturl?access_token=%s';
+    private $wechatUrl = 'https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=%s';
+    private $apiIpUrl = 'https://api.weixin.qq.com/cgi-bin/get_api_domain_ip?access_token=%s';
 
     /**
      * Media constructor.
@@ -19,6 +21,26 @@ class Util
     final public function __construct(&$accessToken)
     {
         $this->accessToken = &$accessToken;
+    }
+
+    public function getApiIp()
+    {
+        $url = sprintf($this->apiIpUrl, $this->accessToken);
+        if ($result = wechat_get_request($url))
+            return $result;
+        return false;
+    }
+
+
+    /**
+     * @return array|bool
+     */
+    public function getWechatIp()
+    {
+        $url = sprintf($this->wechatUrl, $this->accessToken);
+        if ($result = wechat_get_request($url))
+            return $result;
+        return false;
     }
 
     /**
