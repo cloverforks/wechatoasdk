@@ -88,8 +88,12 @@ class WxCallback
             $this->echostr = isset($_GET["echostr"]) ? (string)$_GET['echostr'] : '';
             $this->encrypt_type = isset($_GET["encrypt_type"]) ? (string)$_GET['encrypt_type'] : '';
             $this->msg_signature = isset($_GET["msg_signature"]) ? (string)$_GET['msg_signature'] : '';
-            if (!$this->checkSignature())
+            $result = $this->checkSignature();
+
+            if (false === $result)
                 throw new \RuntimeException('wechatoa_invalid_signature');
+            elseif (is_string($result))
+                die($result);
         }
 
 
