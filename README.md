@@ -20,8 +20,8 @@
 
 ```php
 <?php
-use Clover\WechatOA\WxCallback;
-use Clover\WechatOA\WxXml;
+use CloverPHP\WechatOANotice\WxCallback;
+use CloverPHP\WechatOANotice\WxXml;
 
 require __DIR__ . '/vendor/autoload.php';
 
